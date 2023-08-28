@@ -3,15 +3,33 @@ import { Contacts } from './Contacts/Contacts';
 import { nanoid } from 'nanoid';
 import { Filter } from './Filter/Filter';
 import { Section } from './App.styled';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+const localStorageKey = 'phone-contacts';
+const getLocalStorage = () => {
+  const savedContacts = localStorage.getItem(localStorageKey);
+  if (savedContacts !== null) {
+    return JSON.parse(savedContacts);
+  }
+};
 export const App = () => {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(getLocalStorage);
   const [filter, setFilter] = useState('');
-
+  useEffect(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(contacts));
+  }, [contacts]);
   const handleSearch = event => {
     setFilter(event.target.value);
   };
+
+  //   componentDidUpdate(prevProps, prevState) {
+  //     const { contacts: prevContacts } = prevState;
+  //     const { contacts: nextContacts } = this.state;
+
+  //     if (prevContacts !== nextContacts) {
+  //       localStorage.setItem(localStorageKey, JSON.stringify(nextContacts));
+  //     }
+  //   }
+
   const filterUsers = contacts.filter(contact =>
     contact.name.toLowerCase().includes(filter.toLowerCase())
   );
