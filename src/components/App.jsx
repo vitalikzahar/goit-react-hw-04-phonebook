@@ -6,10 +6,7 @@ import { Section } from './App.styled';
 import { useEffect, useState } from 'react';
 const localStorageKey = 'phone-contacts';
 const getLocalStorage = () => {
-  const savedContacts = localStorage.getItem(localStorageKey);
-  if (savedContacts !== null) {
-    return JSON.parse(savedContacts);
-  }
+  return JSON.parse(localStorage.getItem(localStorageKey)) || [];
 };
 export const App = () => {
   const [contacts, setContacts] = useState(getLocalStorage);
@@ -20,15 +17,6 @@ export const App = () => {
   const handleSearch = event => {
     setFilter(event.target.value);
   };
-
-  //   componentDidUpdate(prevProps, prevState) {
-  //     const { contacts: prevContacts } = prevState;
-  //     const { contacts: nextContacts } = this.state;
-
-  //     if (prevContacts !== nextContacts) {
-  //       localStorage.setItem(localStorageKey, JSON.stringify(nextContacts));
-  //     }
-  //   }
 
   const filterUsers = contacts.filter(contact =>
     contact.name.toLowerCase().includes(filter.toLowerCase())
